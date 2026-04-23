@@ -1,0 +1,34 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "msvc-x64-debug",
+      "displayName": "MSVC x64 Debug",
+      "description": "Visual Studio 2022 generator with CUDA 12.8 toolset, Debug config, output in out/build/msvc-x64-debug",
+      "generator": "Visual Studio 17 2022",
+      "toolset": "cuda=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.8",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "binaryDir": "${sourceDir}/out/build/msvc-x64-debug",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/msvc-x64-debug",
+        "CUDAToolkit_ROOT": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.8"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "build-msvc-x64-debug",
+      "displayName": "Build MSVC x64 Debug",
+      "configurePreset": "msvc-x64-debug",
+      "configuration": "Debug"
+    }
+  ]
+}
