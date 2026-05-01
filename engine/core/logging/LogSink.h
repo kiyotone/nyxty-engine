@@ -14,11 +14,29 @@ namespace Nyxty {
 
     class NYXTY_CORE_API RingBufferSink : public spdlog::sinks::base_sink<std::mutex> {
     public:
-        explicit RingBufferSink(size_t capacity = 512)
-            : m_Capacity(capacity) {
+        explicit RingBufferSink(size_t capacity)
+            : m_Buffer(capacity)
+            , m_Capacity(capacity)
+            , m_Head(0)
+            , m_Size(0)
+        {
         }
 
-        std::vector<LogEntry> CopyEntries() { std::lock_guard lock(mutex_); return m_Entries; }
+        std::vector<LogEntry> CopyEntries() {
+            std::lock_guard lock(mutex_);
+
+            std::vector<LogEntry> result;
+            result.reserve(m_Size);
+
+            size_t index = (m_Head + m_Capacity - m_Size) % m_Capacity;
+
+            for (size_t i = 0; i < m_Size; i++) {
+                result.push_back(m_Buffer[index]);
+                index = (index + 1) % m_Capacity;
+            }
+
+            return result;
+        }
         void Clear() { std::lock_guard lock(mutex_); m_Entries.clear(); }
 
     protected:
@@ -26,10 +44,17 @@ namespace Nyxty {
             spdlog::memory_buf_t formatted;
             base_sink<std::mutex>::formatter_->format(msg, formatted);
 
-            if (m_Entries.size() >= m_Capacity)
-                m_Entries.erase(m_Entries.begin());
+            std::lock_guard lock(mutex_);
 
-            m_Entries.push_back({ fmt::to_string(formatted), msg.level });
+            m_Buffer[m_Head] = {
+                fmt::to_string(formatted),
+                msg.level
+            };
+
+            m_Head = (m_Head + 1) % m_Capacity;
+
+            if (m_Size < m_Capacity)
+                m_Size++;
         }
         void flush_() override {}
 
