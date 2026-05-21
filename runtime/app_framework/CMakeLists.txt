@@ -9,7 +9,7 @@ add_library(app_framework STATIC
 
 target_include_directories(app_framework
     PUBLIC
-        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/../..   # engine repo root — stable whether standalone or submodule
 )
 
 if(MSVC)
