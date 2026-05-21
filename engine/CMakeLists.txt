@@ -40,8 +40,8 @@ target_link_libraries(engine
 # Engine version
 # -----------------------------
 set(NYXTY_ENGINE_VERSION_MAJOR 1)
-set(NYXTY_ENGINE_VERSION_MINOR 2)
-set(NYXTY_ENGINE_VERSION_PATCH 3)
+set(NYXTY_ENGINE_VERSION_MINOR 3)
+set(NYXTY_ENGINE_VERSION_PATCH 0)
 
 target_compile_definitions(engine
     INTERFACE

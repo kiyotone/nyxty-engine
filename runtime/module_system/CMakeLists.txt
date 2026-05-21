@@ -14,8 +14,8 @@ target_compile_definitions(modsys PRIVATE NYXTY_MODULE_BUILD)
 # Include directories
 target_include_directories(modsys
     PUBLIC
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/engine
+        ${CMAKE_CURRENT_SOURCE_DIR}/../..           # engine repo root
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../engine    # engine/ subdirectory headers
         ${NYXTY_THIRD_PARTY_DIR}/spdlog/include
         ${NYXTY_THIRD_PARTY_DIR}/entt/src
         ${NYXTY_THIRD_PARTY_DIR}/json
