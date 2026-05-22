@@ -1,0 +1,19 @@
+# Build output
+build/
+out/
+bin/
+
+# Visual Studio
+.vs/
+
+# Clangd / LSP
+.cache/
+compile_commands.json
+
+# Temp / logs
+*.log
+*.tmp
+*.bak
+
+# Claude Code harness
+.github/
