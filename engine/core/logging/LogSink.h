@@ -44,8 +44,6 @@ namespace Nyxty {
             spdlog::memory_buf_t formatted;
             base_sink<std::mutex>::formatter_->format(msg, formatted);
 
-            std::lock_guard lock(mutex_);
-
             m_Buffer[m_Head] = {
                 fmt::to_string(formatted),
                 msg.level
