@@ -37,7 +37,7 @@ namespace Nyxty {
 
             return result;
         }
-        void Clear() { std::lock_guard lock(mutex_); m_Entries.clear(); }
+        void Clear() { std::lock_guard lock(mutex_); m_Head = 0; m_Size = 0; }
 
     protected:
         void sink_it_(const spdlog::details::log_msg& msg) override {
@@ -59,8 +59,10 @@ namespace Nyxty {
         void flush_() override {}
 
     private:
+        std::vector<LogEntry> m_Buffer;
         size_t m_Capacity;
-        std::vector<LogEntry> m_Entries;
+        size_t m_Head{ 0 };
+        size_t m_Size{ 0 };
     };
 
 } // namespace Nyxty
