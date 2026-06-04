@@ -615,12 +615,14 @@ namespace Nyxty {
     }
 
     void ModuleLoader::Unload() {
-        for (auto& module : m_Modules) {
-            if (module.instance) {
-                EventBusInstance::Get()->UnsubscribeAll(module.instance->GetModuleID());
-                module.instance->OnUnload();
+        // Unload in REVERSE load order so dependencies are always live when a
+        // module shuts down (e.g. SDL must outlive ImGui, bgfx must outlive shaders).
+        for (auto it = m_Modules.rbegin(); it != m_Modules.rend(); ++it) {
+            if (it->instance) {
+                EventBusInstance::Get()->UnsubscribeAll(it->instance->GetModuleID());
+                it->instance->OnUnload();
             }
-            UnloadModule(module);
+            UnloadModule(*it);
         }
         m_Modules.clear();
     }

@@ -88,7 +88,6 @@ public:
     virtual void OnUnload() = 0;
     virtual void OnUpdate() {};
 
-
     // Module ID for event system
     virtual Nyxty::u32 GetModuleID() = 0;
 
@@ -99,6 +98,11 @@ public:
     // Optional command palette/search provider surface.
     virtual std::vector<ModulePaletteItem> GetPaletteItems() const { return {}; }
     virtual bool InvokePaletteItem(const std::string&, const std::string&) { return false; }
+
+    // Optional debug UI panel. Return a non-null name to get a docked panel each frame.
+    // DebugUI discovers panels by iterating ModuleLoader — no separate registration needed.
+    virtual const char* GetPanelName() const { return nullptr; }
+    virtual void        OnDrawUI()           {}
 };
 
 // Module factory functions (implemented in each module)

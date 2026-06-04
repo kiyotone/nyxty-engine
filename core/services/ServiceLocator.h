@@ -6,6 +6,7 @@
 #include <string>
 #include <typeindex>
 #include <unordered_map>
+#include <vector>
 
 namespace Nyxty {
 
@@ -35,6 +36,19 @@ namespace Nyxty {
             if (it == s_Services.end()) return {};
             if (it->second.type != std::type_index(typeid(T))) return {};
             return std::static_pointer_cast<T>(it->second.instance);
+        }
+
+        // Returns every service registered under type T exactly.
+        template<typename T>
+        static std::vector<T*> GetAll() {
+            std::scoped_lock lock(s_Mutex);
+            std::vector<T*> result;
+            const auto target = std::type_index(typeid(T));
+            for (auto& [key, entry] : s_Services) {
+                if (entry.type == target)
+                    result.push_back(static_cast<T*>(entry.instance.get()));
+            }
+            return result;
         }
 
         static bool Has(const std::string& key);
